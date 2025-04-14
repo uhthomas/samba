@@ -20,10 +20,9 @@ RUN mkdir -p /etc/samba/ && \
         writable = yes\n\
         guest ok = yes\n\
         force user = smbuser\n\
+        force group = smbuser\n\
         create mask = 0666\n\
-        directory mask = 0775\n\
-        force create mode = 0666\n\
-        force directory mode = 0775\n" > /etc/samba/smb.conf
+        directory mask = 0775\n" > /etc/samba/smb.conf
 
 RUN mkdir -p /data && \
         chown smbuser:smbuser /data && \
