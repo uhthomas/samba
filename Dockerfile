@@ -1,28 +1,10 @@
-FROM debian:bookworm-slim
+FROM alpine:3.21.3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
 
 RUN apt-get update && apt-get install -y samba && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -M -s /bin/false smbuser
 
-RUN mkdir -p /etc/samba/ && \
-        echo "[global]\n\
-        workgroup = WORKGROUP\n\
-        security = user\n\
-        map to guest = Bad User\n\
-        guest account = smbuser\n\
-        load printers = no\n\
-        disable spoolss = yes\n\
-        smb ports = 445\n\
-        \n\
-        [data]\n\
-        path = /data\n\
-        browseable = yes\n\
-        writable = yes\n\
-        guest ok = yes\n\
-        force user = smbuser\n\
-        force group = smbuser\n\
-        create mask = 0666\n\
-        directory mask = 0775\n" > /etc/samba/smb.conf
+COPY smb.conf /etc/samba/smb.conf
 
 RUN mkdir -p /data && \
         chown smbuser:smbuser /data && \
