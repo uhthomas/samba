@@ -4,7 +4,7 @@ RUN apk add samba && \
         addgroup -g 3000 smbgroup && \
         adduser -DH -u 1000 -G smbgroup -s /bin/false smbuser && \
         mkdir -p /data && \
-        chown smbuser:smbuser /data && \
+        chown smbuser:smbgroup /data && \
         chmod 0775 /data
 
 COPY smb.conf /etc/samba/smb.conf
