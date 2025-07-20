@@ -8,11 +8,33 @@ The container is built with a default configuration which serves the share
 `data` from `data`. It can be mounted with:
 
 ```sh
-❯ sudo mount.cifs -o username=smbuser,password=,uid=1000,gid=2000,forceuid,forcegid //192.168.135.24/data /mnt
+❯ sudo mount.cifs -o username=smbuser,password= //192.168.135.24/data /mnt
 ```
 
-I don't know if the uid, gid, forceuid and forcegid options are necessary, but
-it seems to work.
+The user must be run with uid 1000 and gid 3000.
+
+Kubernetes security context:
+
+```cue
+securityContext: {
+        capabilities: drop: ["ALL"]
+        readOnlyRootFilesystem:   true
+        allowPrivilegeEscalation: false
+}
+```
+
+Kubernetes pod security context:
+
+```cue
+securityContext: {
+        runAsUser:           1000
+        runAsGroup:          3000
+        runAsNonRoot:        true
+        fsGroup:             2000
+        fsGroupChangePolicy: v1.#FSGroupChangeOnRootMismatch
+        seccompProfile: type: v1.#SeccompProfileTypeRuntimeDefault
+}
+```
 
 The configuration can be overridden by mounting a custom configuration file over
 the top of the default one at `/etc/samba/smb.conf`. See
