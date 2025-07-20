@@ -8,10 +8,10 @@ The container is built with a default configuration which serves the share
 `data` from `data`. It can be mounted with:
 
 ```sh
-❯ sudo mount.cifs -o username=smbuser,password= //192.168.135.24/data /mnt
+❯ sudo mount.cifs -o guest,uid=$(id -u),gid=$(id -g) //192.168.135.24/data /mnt
 ```
 
-The user must be run with uid 1000 and gid 3000.
+The user must be run with uid 1000 and gid 3000, with the fs group 2000.
 
 Kubernetes security context:
 
